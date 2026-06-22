@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panduan Akses Dashboard Peserta FKP</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+  :root {
+    --blue: #2563EB;
+    --blue-light: #EFF6FF;
+    --blue-mid: #DBEAFE;
+    --dark: #0F172A;
+    --muted: #64748B;
+    --border: #E2E8F0;
+    --white: #FFFFFF;
+    --surface: #F8FAFC;
+    --green: #10B981;
+    --green-light: #ECFDF5;
+    --amber: #F59E0B;
+    --amber-light: #FFFBEB;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--surface);
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .header {
+    background: var(--blue);
+    color: #fff;
+    padding: 40px 20px 60px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+    top: -150px; right: -100px;
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    width: 300px; height: 300px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+    bottom: -100px; left: -80px;
+  }
+  .header-logo {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-size: 14px; font-weight: 600;
+    margin-bottom: 24px;
+    position: relative; z-index: 1;
+  }
+  .header h1 {
+    font-size: clamp(22px, 5vw, 36px);
+    font-weight: 800;
+    line-height: 1.2;
+    position: relative; z-index: 1;
+  }
+  .header p {
+    margin-top: 10px;
+    font-size: 15px;
+    opacity: 0.85;
+    position: relative; z-index: 1;
+  }
+
+  /* LOGIN BADGE */
+  .login-badge {
+    margin: -24px auto 32px;
+    max-width: 480px;
+    padding: 0 20px;
+    position: relative; z-index: 10;
+  }
+  .login-card {
+    background: var(--white);
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .login-icon {
+    width: 44px; height: 44px;
+    background: var(--blue-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .login-label { font-size: 12px; color: var(--muted); font-weight: 500; }
+  .login-url {
+    font-size: 15px; font-weight: 700; color: var(--blue);
+    text-decoration: none;
+  }
+  .login-url:hover { text-decoration: underline; }
+  .copy-btn {
+    margin-left: auto;
+    background: var(--blue);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 7px 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    flex-shrink: 0;
+    font-family: inherit;
+    transition: background 0.2s;
+  }
+  .copy-btn:hover { background: #1d4ed8; }
+
+  /* CONTAINER */
+  .container { max-width: 640px; margin: 0 auto; padding: 0 20px 60px; }
+
+  /* SECTION TITLE */
+  .section-title {
+    font-size: 18px; font-weight: 700;
+    margin-bottom: 16px;
+    color: var(--dark);
+  }
+
+  /* STEPS */
+  .steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 40px; }
+
+  .step {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .step:hover { box-shadow: 0 2px 12px rgba(37,99,235,0.10); }
+
+  .step-header {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+    user-select: none;
+  }
+
+  .step-num {
+    width: 34px; height: 34px;
+    background: var(--blue);
+    color: #fff;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .step-title { font-size: 15px; font-weight: 700; flex: 1; }
+  .step-icon { font-size: 18px; flex-shrink: 0; }
+
+  .step-chevron {
+    font-size: 18px; color: var(--muted);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+  }
+  .step.open .step-chevron { transform: rotate(180deg); }
+
+  .step-body {
+    display: none;
+    padding: 0 18px 18px 66px;
+  }
+  .step.open .step-body { display: block; }
+
+  .step-body p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+  .step-body .highlight {
+    display: inline-block;
+    background: var(--blue-mid);
+    color: var(--blue);
+    font-weight: 600;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: 13px;
+  }
+
+  /* SCREEN MOCK */
+  .screen-mock {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px;
+    margin-top: 12px;
+    font-size: 13px;
+  }
+  .mock-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .mock-label { color: var(--muted); font-size: 12px; width: 80px; flex-shrink: 0; }
+  .mock-val { font-weight: 600; font-size: 13px; }
+  .badge-green {
+    background: var(--green-light); color: var(--green);
+    font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .badge-blue {
+    background: var(--blue-light); color: var(--blue);
+    font-size: 11px; font-weight: 700;
+    padding: 2px 8px; border-radius: 20px;
+  }
+
+  /* STAT CARDS */
+  .stat-row { display: flex; gap: 8px; margin-top: 12px; }
+  .stat-card {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .stat-card .emoji { font-size: 20px; }
+  .stat-card .val { font-size: 18px; font-weight: 800; margin-top: 4px; }
+  .stat-card .lbl { font-size: 11px; color: var(--muted); font-weight: 500; }
+
+  /* DIVIDER */
+  .divider { height: 1px; background: var(--border); margin: 32px 0; }
+
+  /* PASSWORD TABLE */
+  .pwd-section { margin-bottom: 40px; }
+
+  .search-wrap { position: relative; margin-bottom: 14px; }
+  .search-wrap input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s;
+    background: var(--white);
+  }
+  .search-wrap input:focus { border-color: var(--blue); }
+  .search-wrap .search-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    font-size: 18px; color: var(--muted); pointer-events: none;
+  }
+
+  .pwd-table {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .pwd-table-head {
+    display: grid; grid-template-columns: auto 1fr auto;
+    padding: 10px 16px;
+    background: var(--blue);
+    color: #fff;
+    font-size: 12px; font-weight: 700;
+    gap: 12px;
+  }
+  .pwd-row {
+    display: grid; grid-template-columns: auto 1fr auto;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    align-items: center;
+    transition: background 0.15s;
+  }
+  .pwd-row:last-child { border-bottom: none; }
+  .pwd-row:hover { background: var(--blue-light); }
+  .pwd-row .num { font-size: 12px; color: var(--muted); width: 22px; text-align: right; }
+  .pwd-row .name { font-size: 14px; font-weight: 600; }
+  .pwd-row .pass {
+    font-family: 'Courier New', monospace;
+    font-size: 13px; font-weight: 700;
+    color: var(--blue);
+    background: var(--blue-light);
+    padding: 3px 8px; border-radius: 6px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    user-select: all;
+  }
+  .pwd-row .pass:hover { background: var(--blue-mid); }
+
+  .no-result {
+    padding: 30px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  /* CTA */
+  .cta-box {
+    background: linear-gradient(135deg, var(--blue) 0%, #1d4ed8 100%);
+    border-radius: 16px;
+    padding: 28px 24px;
+    color: #fff;
+    text-align: center;
+  }
+  .cta-box h3 { font-size: 20px; font-weight: 800; }
+  .cta-box p { font-size: 14px; opacity: 0.85; margin: 8px 0 20px; }
+  .cta-btn {
+    display: inline-block;
+    background: #fff;
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 12px 28px;
+    border-radius: 10px;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
+    background: var(--dark);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-size: 14px; font-weight: 600;
+    transition: transform 0.3s ease;
+    z-index: 999;
+    pointer-events: none;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-logo">🎓 Festival Karakter Pelajar 2026</div>
+  <h1>Panduan Akses Dashboard Peserta</h1>
+  <p>Kenali fitur dashboardmu — dari poin sampai kelola konten</p>
+</div>
+
+<!-- LOGIN BADGE -->
+<div class="login-badge">
+  <div class="login-card">
+    <div class="login-icon">🔗</div>
+    <div>
+      <div class="login-label">Link Login</div>
+      <a class="login-url" href="https://idola.stekom.ac.id/login" target="_blank">idola.stekom.ac.id/login</a>
+    </div>
+    <button class="copy-btn" onclick="copyUrl()">Salin</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+  <p class="section-title">Cara Pakai Dashboard Peserta</p>
+
+  <div class="steps" id="steps">
+
+    <!-- Step 1 -->
+    <div class="step open" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div class="step-title">Masuk ke Akun</div>
+        <div class="step-icon">🔑</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Buka <span class="highlight">/login/peserta</span>, lalu masuk pakai <strong>nama lengkap</strong> atau <strong>nomor WhatsApp</strong> + password yang diberikan panitia. Password ada di lembar data peserta (lihat bagian bawah halaman ini).</p>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div class="step-title">Kartu Profil & Peringkat</div>
+        <div class="step-icon">🪪</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Di bagian atas dashboard ada foto, nama, sekolah, peringkat, dan status kamu. Peringkat dihitung <strong>otomatis</strong> dari total poin.</p>
+        <div class="screen-mock">
+          <div class="mock-row"><span class="mock-label">Nama</span><span class="mock-val">Adnan Septian Maulana</span></div>
+          <div class="mock-row"><span class="mock-label">Sekolah</span><span class="mock-val">SMKN 1 BLORA</span></div>
+          <div class="mock-row"><span class="mock-label">Peringkat</span><span class="mock-val">#30</span></div>
+          <div class="mock-row"><span class="mock-label">Status</span><span class="badge-green">Aktif</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div class="step-title">Ganti Foto</div>
+        <div class="step-icon">📸</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Klik tombol <span class="highlight">Ganti Foto</span> di kartu profil untuk memperbarui fotomu. Foto otomatis dikompres agar ringan dan cepat dimuat.</p>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div class="step-title">Total Poin, Peringkat, Pendukung</div>
+        <div class="step-icon">🏆</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Tiga kartu ringkasan di bawah profil menampilkan:</p>
+        <div class="stat-row">
+          <div class="stat-card"><div class="emoji">🏅</div><div class="val">105</div><div class="lbl">Total Poin</div></div>
+          <div class="stat-card"><div class="emoji">🎖️</div><div class="val">#30</div><div class="lbl">Peringkat</div></div>
+          <div class="stat-card"><div class="emoji">👥</div><div class="val">21</div><div class="lbl">Pendukung</div></div>
+        </div>
+        <p style="margin-top:10px;">Total Poin = vote + quest yang diselesaikan pendukungmu.</p>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div class="step-title">Perkembangan Poin</div>
+        <div class="step-icon">📈</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Grafik menunjukkan pertumbuhan poinmu dari hari ke hari, gabungan dari <strong>vote harian</strong>, <strong>vote favorit</strong>, dan <strong>quest yang disetujui</strong>.</p>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">6</div>
+        <div class="step-title">Supporter Terbesar</div>
+        <div class="step-icon">💪</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Daftar pendukung dengan kontribusi poin terbanyak. Tampil <strong>5 teratas</strong>; klik <span class="highlight">Tampilkan semua</span> untuk melihat seluruh pendukungmu.</p>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">7</div>
+        <div class="step-title">Link Konten Aku</div>
+        <div class="step-icon">🔗</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Tambahkan link kontenmu (TikTok / IG). Pendukung memilih konten ini saat mengerjakan quest <strong>Like/Komen/Repost</strong> atau <strong>Pakai Sound</strong>.</p>
+        <p style="margin-top:8px;">Pilih jenis konten → tempel link → klik <span class="highlight">Tambah Link</span>. Makin banyak konten, makin banyak poin yang bisa masuk! 🎉</p>
+      </div>
+    </div>
+
+    <!-- Step 8 -->
+    <div class="step" onclick="toggleStep(this)">
+      <div class="step-header">
+        <div class="step-num">8</div>
+        <div class="step-title">Pengaturan Akun</div>
+        <div class="step-icon">⚙️</div>
+        <div class="step-chevron">▾</div>
+      </div>
+      <div class="step-body">
+        <p>Ubah <strong>deskripsi diri</strong> dan <strong>ganti password</strong> di bagian Pengaturan Akun. Gunakan password yang mudah kamu ingat agar tidak lupa.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- PASSWORD SECTION -->
+  <div class="pwd-section">
+    <p class="section-title">🔐 Data Sandi Peserta</p>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Cari nama peserta..." oninput="filterTable()" autocomplete="off">
+    </div>
+    <div class="pwd-table">
+      <div class="pwd-table-head">
+        <span>#</span>
+        <span>Nama Peserta</span>
+        <span>Password</span>
+      </div>
+      <div id="tableBody"></div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-box">
+    <h3>Siap Masuk? 🚀</h3>
+    <p>Cari namamu di tabel di atas, catat passwordmu, lalu buka link login.</p>
+    <a class="cta-btn" href="https://idola.stekom.ac.id/login" target="_blank">Buka Halaman Login →</a>
+  </div>
+
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+const participants = [
+  ["Adnan Septian Maulana","STK-RVYV-RUHB"],
+  ["Ageng Prasetyo","STK-B6DD-44VL"],
+  ["Ahmad Rizky","STK-447Z-7KV4"],
+  ["Aini Binti Yosef","STK-6VGH-BL78"],
+  ["Akbar Azif","STK-VWWL-NAFB"],
+  ["Aldea Mutiara Insani","STK-KFVA-ZR6T"],
+  ["Aldrian Priyambada","STK-DEBW-WMBJ"],
+  ["Alfino Nathan Danendra","STK-Q87N-AZVX"],
+  ["Amira Dewi Anggraeni","STK-D78F-HYPF"],
+  ["Ana Alivia","STK-G6D2-6LBZ"],
+  ["Andika Radit Pratama","STK-GVX7-Z998"],
+  ["Annisa Aribah Izdihar","STK-S8DR-Z4Q6"],
+  ["Arwidatul Roffia Rahmawati","STK-FGHZ-UDVY"],
+  ["Astri Putri Anugraheni","STK-UL62-FC3U"],
+  ["Aura Khanza Putri Nadhyka","STK-NX3H-RDTF"],
+  ["Aurelia Dwi Karina","STK-KCQT-697C"],
+  ["Aviv Aditya Pramanda","STK-9YFH-ZE3D"],
+  ["Chiquita Azzahra Wijaya","STK-3SD9-Z4EN"],
+  ["Choirul Rafi","STK-69ZV-A3HT"],
+  ["Danna Arya Dewanta","STK-EAZ7-H2HZ"],
+  ["Dea Mentari Cintania Amanda","STK-E7QG-2Y8Z"],
+  ["Dwi Fajar Wati","STK-P7XA-QKLQ"],
+  ["Dwi Saputra","STK-65MU-MU4Y"],
+  ["Dzahrotusita Kinaryo Wisanti","STK-4MTK-HUEH"],
+  ["Elsa Kharisma Rizqi","STK-YUJZ-F2JP"],
+  ["Encha Putri Anggita","STK-RHNC-PK8E"],
+  ["Essaprilla Nafisatul Fikriyah","STK-UVSA-Z33A"],
+  ["Fachrizal Akbar Rahman","STK-Q8KK-U6AX"],
+  ["Falsa Sya'Bana Khoiri Putri","STK-3EXA-ZBFP"],
+  ["Fathimah Arinal Muna","STK-PBS4-J4GD"],
+  ["Fidelya Ata","STK-XFXP-MREU"],
+  ["Fiona Xavierananda Fathorrahman","STK-K68A-DDKU"],
+  ["Firda Amelia","STK-SL7D-CJR4"],
+  ["Hana Mutiasih","STK-UF74-NCFS"],
+  ["Haura Refasya Azka Azzahra","STK-8FB2-FZ3G"],
+  ["Janetra Maheswari Raditiya","STK-M2M3-HEBY"],
+  ["Jenisa Aulia Sari","STK-MGF3-U67R"],
+  ["Jihan Putri Dzahabiyyah","STK-RQ8S-A87F"],
+  ["Johsi Bagus Triatmaja","STK-XPQ7-AVXL"],
+  ["Kaella Arum Rima Wardani","STK-EZ9X-QH5J"],
+  ["Kevin Wirabegawan","STK-WUD3-X2GM"],
+  ["Kheisya Valentina Devi","STK-SB89-Q8PA"],
+  ["Maura Waqiratun Najwa","STK-GK2P-2JK5"],
+  ["Mauduah Engelia Nur Andi Putri","STK-UPZD-5PLV"],
+  ["Meycha Queennetha","STK-8QX4-LCWF"],
+  ["Meysha Alviyani Putri","STK-Y9SD-EPXG"],
+  ["Miftahurrohim Yusuf Husmiawan","STK-WSN3-5A6H"],
+  ["Mohammad Aldo Prattama","STK-GVPV-UBTJ"],
+  ["Muhammad Gibran Maulana Ibrahim","STK-WNFU-U8SD"],
+  ["Muhammad Iqbal Sadewa Basuki","STK-JC4Y-3K2Q"],
+  ["Mukhammad Haslin Pradana","STK-NJUB-ZNWY"],
+  ["Mutiara Bahariyah","STK-H3X2-7SV2"],
+  ["Nadia Enjelika","STK-TPF5-HRUJ"],
+  ["Nandya Febriana","STK-VGC5-5N5L"],
+  ["Neisya Rizky Maulidya","STK-NKX7-SYQK"],
+  ["Puji Lestari","STK-JSJN-C9CU"],
+  ["Putri Rahmawati","STK-3C4G-GF2U"],
+  ["Rachelia Afifah Az Zahra","STK-FSGU-654K"],
+  ["Raihana Hava Zaviera","STK-3UAA-Q6VQ"],
+  ["Rangga Pangestu Pratama","STK-H9XB-HV39"],
+  ["Reza Juliawan","STK-GPRQ-ZFP4"],
+  ["Riko Yulianto","STK-R78T-KD8Q"],
+  ["Rizki Febriyanto Pryambodo","STK-BKVC-3RTC"],
+  ["Salzabila Arinka Maharani","STK-EXJ4-ELSF"],
+  ["Sayna Debora Agustin","STK-PBSF-9BXW"],
+  ["Selfi Maulidah Melani","STK-H7NL-9ASG"],
+  ["Sigid Aji Loko Birowo Noor Widexdo Wiyat Nowo Wibowo","STK-KQAW-9KDU"],
+  ["Syafa Anindya Putri Cantika","STK-NFZT-S2NJ"],
+  ["Syifa Salsabila Aquera","STK-EE6C-E9HJ"],
+  ["Syifa Zulia Rizki","STK-9M8S-MP5U"],
+  ["Tata Nurin Andriyani","STK-TCQV-9QPT"],
+  ["Ulia Nur Faizah","STK-WDGF-NGWJ"],
+  ["Valentino Eka Putra","STK-UNB3-LWCG"],
+  ["Vina Indriyana","STK-UTTK-F44J"],
+  ["Yehezkiel Putera Emas","STK-UM6B-EKTR"],
+  ["Zahra Nafiz Aulia Hasruddin","STK-RXLJ-WUSL"],
+  ["Zara Zaina Fazia","STK-T3V4-RUFH"],
+  ["Zulfa Sity Solechanatun Putri","STK-4YC2-NGRQ"]
+];
+
+function renderTable(list) {
+  const body = document.getElementById('tableBody');
+  if (list.length === 0) {
+    body.innerHTML = '<div class="no-result">Tidak ada peserta ditemukan 🔍</div>';
+    return;
+  }
+  body.innerHTML = list.map(([name, pass], i) =>
+    `<div class="pwd-row">
+      <span class="num">${participants.indexOf(participants.find(p=>p[0]===name))+1}</span>
+      <span class="name">${name}</span>
+      <span class="pass" onclick="copyPass('${pass}',event)" title="Klik untuk salin">${pass}</span>
+    </div>`
+  ).join('');
+}
+
+function filterTable() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const filtered = participants.filter(([name]) => name.toLowerCase().includes(q));
+  renderTable(filtered);
+}
+
+function copyPass(pass, e) {
+  e.stopPropagation();
+  navigator.clipboard.writeText(pass).then(() => showToast('Password disalin: ' + pass));
+}
+
+function copyUrl() {
+  navigator.clipboard.writeText('https://idola.stekom.ac.id/login').then(() => showToast('Link login disalin!'));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function toggleStep(el) {
+  el.classList.toggle('open');
+}
+
+renderTable(participants);
+</script>
+</body>
+</html>
